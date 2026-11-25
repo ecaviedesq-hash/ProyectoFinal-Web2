@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand board · Turno de piso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Tokens: copiados de DESIGN.md §5. Ningún otro color o fuente se usa como valor visual. */
+:root {
+  --color-fondo: #F3F1F7;
+  --color-superficie: #FFFFFF;
+  --color-superficie-alta: #E8E4F2;
+  --color-borde: #D9D4E4;
+  --color-borde-control: #6E6880;
+  --color-texto: #1A1523;
+  --color-texto-suave: #5C5670;
+  --color-acento: #5B2BB5;
+  --color-sobre-acento: #FFFFFF;
+  --color-pendiente: #1E4E8C; --color-pendiente-fondo: #E4EEF8;
+  --color-proxima: #8A5A00; --color-proxima-fondo: #FCF0D6;
+  --color-vencida: #B42318; --color-vencida-fondo: #FDE7E5;
+  --color-completada: #276B43; --color-completada-fondo: #E4F3EA;
+  --color-reasignar: #7A3E12; --color-reasignar-fondo: #F8E8DC;
+  --fuente-texto: "Sora", system-ui, sans-serif;
+  --espacio-1: 4px; --espacio-2: 8px; --espacio-3: 12px; --espacio-4: 16px;
+  --espacio-5: 24px; --espacio-6: 32px; --espacio-7: 48px; --espacio-8: 64px;
+  --radio-control: 6px; --radio-tarjeta: 10px; --radio-insignia: 999px;
+  --alto-tactil: 44px;
+  --duracion: 120ms;
+  --borde-estado: 4px;
+}
+@media (prefers-reduced-motion: reduce) { :root { --duracion: 0ms; } }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-fondo); color: var(--color-texto); font-family: var(--fuente-texto); font-size: 16px; line-height: 24px; font-weight: 400; }
+.contenedor { max-width: 1100px; margin: 0 auto; padding: var(--espacio-7) var(--espacio-6) var(--espacio-8); }
+@media (max-width: 640px) { .contenedor { padding: var(--espacio-6) var(--espacio-4); } }
+
+h1 { font-size: 28px; line-height: 34px; font-weight: 700; margin: 0 0 var(--espacio-3); }
+h2 { font-size: 20px; line-height: 26px; font-weight: 700; margin: 0 0 var(--espacio-4); }
+h3 { font-size: 16px; line-height: 24px; font-weight: 700; margin: 0 0 var(--espacio-3); }
+p { margin: 0 0 var(--espacio-3); }
+.suave { color: var(--color-texto-suave); }
+.pequeno { font-size: 14px; line-height: 20px; }
+section { margin-bottom: var(--espacio-7); }
+.rejilla { display: grid; gap: var(--espacio-4); }
+.r2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.r3 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.r5 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.panel { background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio-tarjeta); padding: var(--espacio-5); }
+
+header.portada { border-bottom: 1px solid var(--color-borde); padding-bottom: var(--espacio-6); margin-bottom: var(--espacio-7); }
+.sobretitulo { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--color-texto-suave); letter-spacing: .04em; text-transform: uppercase; margin: 0 0 var(--espacio-2); }
+
+.palabras { display: flex; flex-wrap: wrap; gap: var(--espacio-2); margin: var(--espacio-3) 0; }
+.palabras span { font-size: 20px; line-height: 26px; font-weight: 700; padding: var(--espacio-2) var(--espacio-4); background: var(--color-superficie-alta); border-radius: var(--radio-control); }
+
+.muestra { border-radius: var(--radio-tarjeta); overflow: hidden; border: 1px solid var(--color-borde); background: var(--color-superficie); }
+.muestra .color { height: 72px; border-bottom: 1px solid var(--color-borde); }
+.muestra .datos { padding: var(--espacio-3); }
+code, .codigo { font-family: var(--fuente-texto); font-size: 14px; line-height: 20px; font-weight: 600; }
+.par { padding: var(--espacio-4); border-radius: var(--radio-tarjeta); }
+.par strong { display: block; font-size: 20px; line-height: 26px; }
+
+.escala div { display: flex; gap: var(--espacio-4); align-items: baseline; padding: var(--espacio-3) 0; border-bottom: 1px solid var(--color-borde); flex-wrap: wrap; }
+.escala div:last-child { border-bottom: 0; }
+.escala .nombre { width: 180px; flex: none; }
+
+.espacios { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--espacio-4); }
+.espacios div { text-align: center; }
+.espacios i { display: block; background: var(--color-acento); margin: 0 auto var(--espacio-2); }
+
+.boton { display: inline-flex; align-items: center; justify-content: center; min-height: var(--alto-tactil); padding: 0 var(--espacio-5); border-radius: var(--radio-control); font: 700 16px/24px var(--fuente-texto); border: 1px solid transparent; cursor: pointer; transition: background-color var(--duracion), border-color var(--duracion); }
+.boton:focus-visible, .campo input:focus-visible, .paso:focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+.primario { background: var(--color-acento); color: var(--color-sobre-acento); }
+.secundario { background: var(--color-superficie); color: var(--color-acento); border-color: var(--color-borde-control); }
+.peligro { background: var(--color-superficie); color: var(--color-vencida); border-color: var(--color-vencida); }
+.boton[disabled] { opacity: .5; cursor: not-allowed; }
+.fila-botones { display: flex; flex-wrap: wrap; gap: var(--espacio-3); align-items: center; }
+
+.campo { display: flex; flex-direction: column; gap: var(--espacio-1); }
+.campo label { font-size: 14px; line-height: 20px; color: var(--color-texto-suave); }
+.campo input { min-height: var(--alto-tactil); border: 1px solid var(--color-borde-control); border-radius: var(--radio-control); padding: 0 var(--espacio-3); font: 400 16px/24px var(--fuente-texto); color: var(--color-texto); background: var(--color-superficie); width: 100%; }
+.campo.error input { border-color: var(--color-vencida); }
+.campo .mensaje { font-size: 14px; line-height: 20px; color: var(--color-vencida); }
+
+.insignia { display: inline-flex; align-items: center; gap: var(--espacio-1); padding: 2px var(--espacio-3) 2px var(--espacio-2); border-radius: var(--radio-insignia); font-size: 14px; line-height: 20px; font-weight: 700; white-space: nowrap; }
+.insignia svg, .aviso svg, .casilla svg { width: 16px; height: 16px; flex: none; }
+.e-pendiente { color: var(--color-pendiente); background: var(--color-pendiente-fondo); }
+.e-proxima { color: var(--color-proxima); background: var(--color-proxima-fondo); }
+.e-vencida { color: var(--color-vencida); background: var(--color-vencida-fondo); }
+.e-completada { color: var(--color-completada); background: var(--color-completada-fondo); }
+.e-reasignar { color: var(--color-reasignar); background: var(--color-reasignar-fondo); }
+.insignias { display: flex; flex-wrap: wrap; gap: var(--espacio-2); }
+
+.telefono { max-width: 390px; background: var(--color-fondo); border: 1px solid var(--color-borde); border-radius: var(--radio-tarjeta); padding: var(--espacio-4); display: flex; flex-direction: column; gap: var(--espacio-3); }
+.tarjeta { background: var(--color-superficie); border: 1px solid var(--color-borde); border-left: var(--borde-estado) solid var(--color-pendiente); border-radius: var(--radio-tarjeta); padding: var(--espacio-4); }
+.tarjeta.proxima { border-left-color: var(--color-proxima); }
+.tarjeta.vencida { border-left-color: var(--color-vencida); }
+.tarjeta.completada { border-left-color: var(--color-completada); }
+.tarjeta .titulo { font-size: 20px; line-height: 26px; font-weight: 700; margin: var(--espacio-2) 0; }
+.tarjeta .meta { font-size: 14px; line-height: 20px; color: var(--color-texto-suave); margin: 0; }
+.hora-vencida { color: var(--color-vencida); font-weight: 700; }
+
+.paso { display: flex; gap: var(--espacio-3); align-items: flex-start; min-height: var(--alto-tactil); width: 100%; padding: var(--espacio-2) 0; background: transparent; border: 0; color: var(--color-texto); font: 400 16px/24px var(--fuente-texto); text-align: left; cursor: pointer; }
+.casilla { width: 20px; height: 20px; margin-top: 2px; border: 2px solid var(--color-borde-control); border-radius: var(--radio-control); display: inline-flex; align-items: center; justify-content: center; flex: none; background: var(--color-superficie); }
+.paso.marcado .casilla { background: var(--color-acento); border-color: var(--color-acento); color: var(--color-sobre-acento); }
+.paso .quien { display: block; font-size: 14px; line-height: 20px; color: var(--color-texto-suave); }
+
+.indicador .numero { font-size: 28px; line-height: 34px; font-weight: 700; }
+.indicador.vencidas .numero, .indicador.vencidas .etiqueta-estado { color: var(--color-vencida); }
+.indicador.proximas .numero, .indicador.proximas .etiqueta-estado { color: var(--color-proxima); }
+.indicador.reasignar .numero, .indicador.reasignar .etiqueta-estado { color: var(--color-reasignar); }
+.indicador.pendientes .numero, .indicador.pendientes .etiqueta-estado { color: var(--color-pendiente); }
+.indicador.completadas .numero, .indicador.completadas .etiqueta-estado { color: var(--color-completada); }
+
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio-tarjeta); min-width: 760px; }
+th, td { text-align: left; padding: var(--espacio-3) var(--espacio-4); border-bottom: 1px solid var(--color-borde); vertical-align: middle; }
+th { font-size: 14px; line-height: 20px; color: var(--color-texto-suave); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+
+.aviso { display: flex; gap: var(--espacio-3); align-items: flex-start; background: var(--color-superficie); border: 1px solid var(--color-borde); border-left: var(--borde-estado) solid; border-radius: var(--radio-tarjeta); padding: var(--espacio-3) var(--espacio-4); }
+.aviso svg { width: 20px; height: 20px; margin-top: 2px; }
+.a-exito { border-left-color: var(--color-completada); } .a-exito svg { color: var(--color-completada); }
+.a-advertencia { border-left-color: var(--color-proxima); } .a-advertencia svg { color: var(--color-proxima); }
+.a-error { border-left-color: var(--color-vencida); } .a-error svg { color: var(--color-vencida); }
+.a-info { border-left-color: var(--color-acento); } .a-info svg { color: var(--color-acento); }
+
+.vacio { text-align: center; padding: var(--espacio-6) var(--espacio-4); border: 1px dashed var(--color-borde-control); border-radius: var(--radio-tarjeta); background: var(--color-superficie); }
+.esqueleto { background: var(--color-superficie-alta); border-radius: var(--radio-control); height: 16px; margin-bottom: var(--espacio-2); }
+footer { border-top: 1px solid var(--color-borde); padding-top: var(--espacio-5); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pendiente" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-proxima" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 4h10M7 20h10M8 4c0 4 8 4 8 8s-8 4-8 8M16 4c0 4-8 4-8 8s8 4 8 8"/></g></symbol>
+  <symbol id="i-vencida" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></g></symbol>
+  <symbol id="i-completada" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-reasignar" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="3"/><path d="M4 19c1-3 3.2-4.5 6-4.5M17 11v6M14 14h6"/></g></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="contenedor">
+  <header class="portada">
+    <p class="sobretitulo">Staff del Interact2Hack · Brand board · Generado desde DESIGN.md v1.0</p>
+    <h1>Turno de piso</h1>
+    <p class="suave">Sistema de diseño de la herramienta de organización del staff. Si algo de esta página no coincide con <span class="codigo">DESIGN.md</span>, manda <span class="codigo">DESIGN.md</span>.</p>
+  </header>
+
+  <section>
+    <h2>Brief</h2>
+    <div class="rejilla r2">
+      <div class="panel">
+        <h3>Personalidad</h3>
+        <div class="palabras"><span>directo</span><span>legible</span><span>en turno</span></div>
+        <p class="suave pequeno">Referente: la hoja de llamado de un evento en vivo. La usa el administrador en la laptop de la mesa de staff y el estudiante con el celular en el pasillo.</p>
+      </div>
+      <div class="panel">
+        <h3>Decisiones que se ven</h3>
+        <ol class="pequeno">
+          <li>El morado es la acción, no un estado.</li>
+          <li>Cada estado lleva palabra e icono.</li>
+          <li>La tarjeta no se rellena del color del estado.</li>
+          <li>Por reasignar se suma al estado de tiempo.</li>
+          <li>Sin pulso y sin emoji.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Color · base</h2>
+    <div class="rejilla r5">
+      <div class="muestra"><div class="color" style="background:var(--color-fondo)"></div><div class="datos"><strong>Fondo</strong><br><code>--color-fondo</code><br><code>#F3F1F7</code></div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-superficie)"></div><div class="datos"><strong>Superficie</strong><br><code>--color-superficie</code><br><code>#FFFFFF</code></div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-superficie-alta)"></div><div class="datos"><strong>Superficie alta</strong><br><code>--color-superficie-alta</code><br><code>#E8E4F2</code></div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-borde)"></div><div class="datos"><strong>Borde</strong><br><code>--color-borde</code><br><code>#D9D4E4</code></div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-borde-control)"></div><div class="datos"><strong>Borde de control</strong><br><code>--color-borde-control</code><br><code>#6E6880</code> · 5.31:1</div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-texto)"></div><div class="datos"><strong>Texto</strong><br><code>--color-texto</code><br><code>#1A1523</code> · 17.87:1</div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-texto-suave)"></div><div class="datos"><strong>Texto suave</strong><br><code>--color-texto-suave</code><br><code>#5C5670</code> · 6.95:1</div></div>
+      <div class="muestra"><div class="color" style="background:var(--color-acento)"></div><div class="datos"><strong>Acento</strong><br><code>--color-acento</code><br><code>#5B2BB5</code> · 8.54:1</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Color · estados de una tarea</h2>
+    <p class="suave pequeno">Contraste del texto sobre el fondo de su insignia. Mínimo 4.5:1. Los nombres son los del PRD.</p>
+    <div class="rejilla r5">
+      <div class="par e-pendiente"><strong>Pendiente</strong><span class="codigo">#1E4E8C / #E4EEF8</span><br><span class="codigo">7.09:1</span></div>
+      <div class="par e-proxima"><strong>Próxima a vencer</strong><span class="codigo">#8A5A00 / #FCF0D6</span><br><span class="codigo">5.24:1</span></div>
+      <div class="par e-vencida"><strong>Vencida</strong><span class="codigo">#B42318 / #FDE7E5</span><br><span class="codigo">5.55:1</span></div>
+      <div class="par e-completada"><strong>Completada</strong><span class="codigo">#276B43 / #E4F3EA</span><br><span class="codigo">5.60:1</span></div>
+      <div class="par e-reasignar"><strong>Por reasignar</strong><span class="codigo">#7A3E12 / #F8E8DC</span><br><span class="codigo">6.96:1</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tipografía</h2>
+    <div class="panel escala">
+      <div><span class="nombre suave pequeno">Título · 28/34 · 700</span><span style="font-size:28px;line-height:34px;font-weight:700">Mis tareas</span></div>
+      <div><span class="nombre suave pequeno">Sección · 20/26 · 700</span><span style="font-size:20px;line-height:26px;font-weight:700">Abrir la sala de pitch</span></div>
+      <div><span class="nombre suave pequeno">Cuerpo · 16/24 · 400</span><span>Marca el paso cuando lo termines. Se guarda quién y a qué hora.</span></div>
+      <div><span class="nombre suave pequeno">Pequeño · 14/20 · 400</span><span class="pequeno">Hasta el 18 abr 2027, 09:00</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Espaciado y radios</h2>
+    <div class="panel">
+      <div class="espacios">
+        <div><i style="width:4px;height:4px"></i><span class="codigo">1 · 4</span></div>
+        <div><i style="width:8px;height:8px"></i><span class="codigo">2 · 8</span></div>
+        <div><i style="width:12px;height:12px"></i><span class="codigo">3 · 12</span></div>
+        <div><i style="width:16px;height:16px"></i><span class="codigo">4 · 16</span></div>
+        <div><i style="width:24px;height:24px"></i><span class="codigo">5 · 24</span></div>
+        <div><i style="width:32px;height:32px"></i><span class="codigo">6 · 32</span></div>
+        <div><i style="width:48px;height:48px"></i><span class="codigo">7 · 48</span></div>
+        <div><i style="width:64px;height:64px"></i><span class="codigo">8 · 64</span></div>
+      </div>
+      <p class="suave pequeno">Radios: control 6 px · tarjeta 10 px · insignia píldora. Área táctil mínima: 44 px. Movimiento: 120 ms, o 0 ms si se pidió menos movimiento.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Componentes</h2>
+    <div class="rejilla r2">
+      <div class="panel">
+        <h3>Botón</h3>
+        <div class="fila-botones">
+          <button class="boton primario" type="button">Confirmar tarea</button>
+          <button class="boton secundario" type="button">Reasignar</button>
+          <button class="boton peligro" type="button">Eliminar cuenta</button>
+        </div>
+        <div class="fila-botones" style="margin-top:var(--espacio-3)">
+          <button class="boton primario" type="button" disabled>Confirmar tarea</button>
+          <span class="pequeno" style="color:var(--color-vencida)">Falta un paso por marcar.</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Formulario</h3>
+        <div class="rejilla">
+          <div class="campo">
+            <label for="titulo">Título de la tarea</label>
+            <input id="titulo" value="Abrir la sala de pitch">
+          </div>
+          <div class="campo error">
+            <label for="hora">Hora límite</label>
+            <input id="hora" value="" aria-describedby="hora-error">
+            <span class="mensaje" id="hora-error">Escribe la hora límite. Sin ella no se sabe cuándo vence.</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Insignia de estado</h3>
+        <div class="insignias">
+          <span class="insignia e-pendiente"><svg aria-hidden="true"><use href="#i-pendiente"/></svg>Pendiente</span>
+          <span class="insignia e-proxima"><svg aria-hidden="true"><use href="#i-proxima"/></svg>Próxima a vencer</span>
+          <span class="insignia e-vencida"><svg aria-hidden="true"><use href="#i-vencida"/></svg>Vencida</span>
+          <span class="insignia e-completada"><svg aria-hidden="true"><use href="#i-completada"/></svg>Completada</span>
+          <span class="insignia e-reasignar"><svg aria-hidden="true"><use href="#i-reasignar"/></svg>Por reasignar</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Ítem de checklist</h3>
+        <button class="paso marcado" type="button">
+          <span class="casilla" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+          <span>Probar micrófono y proyector<span class="quien">Marcado por Camila Ruiz, 07:55</span></span>
+        </button>
+        <button class="paso" type="button">
+          <span class="casilla" aria-hidden="true"></span>
+          <span>Colocar la señalética de la puerta<span class="quien">Sin marcar</span></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tarjeta de tarea · celular (390 px)</h2>
+    <div class="telefono">
+      <h3 style="margin:0">Mis tareas</h3>
+
+      <article class="tarjeta">
+        <span class="insignia e-pendiente"><svg aria-hidden="true"><use href="#i-pendiente"/></svg>Pendiente</span>
+        <p class="titulo">Abrir la sala de pitch</p>
+        <p class="meta">Hasta el 18 abr 2027, 09:00 · 2 de 3 pasos · Camila Ruiz, Mateo Lema</p>
+        <button class="paso marcado" type="button">
+          <span class="casilla" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+          <span>Confirmar sillas y mesas<span class="quien">Marcado por Mateo Lema, 07:41</span></span>
+        </button>
+        <button class="paso marcado" type="button">
+          <span class="casilla" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+          <span>Probar micrófono y proyector<span class="quien">Marcado por Camila Ruiz, 07:55</span></span>
+        </button>
+        <button class="paso" type="button">
+          <span class="casilla" aria-hidden="true"></span>
+          <span>Colocar la señalética de la puerta<span class="quien">Sin marcar</span></span>
+        </button>
+        <div class="fila-botones" style="margin-top:var(--espacio-3)">
+          <button class="boton primario" type="button" disabled>Confirmar tarea</button>
+        </div>
+      </article>
+
+      <article class="tarjeta proxima">
+        <span class="insignia e-proxima"><svg aria-hidden="true"><use href="#i-proxima"/></svg>Próxima a vencer</span>
+        <p class="titulo">Recibir al jurado en la entrada principal</p>
+        <p class="meta">Hasta el 18 abr 2027, 08:30 · 1 de 2 pasos · Camila Ruiz, Diego Mora</p>
+        <button class="boton primario" type="button" disabled>Confirmar tarea</button>
+      </article>
+
+      <article class="tarjeta completada">
+        <span class="insignia e-completada"><svg aria-hidden="true"><use href="#i-completada"/></svg>Completada</span>
+        <p class="titulo">Entregar kits de bienvenida al staff</p>
+        <p class="meta">Confirmada por Andrés Vela, 07:15 · 3 de 3 pasos</p>
+      </article>
+
+      <article class="tarjeta vencida">
+        <div class="insignias">
+          <span class="insignia e-vencida"><svg aria-hidden="true"><use href="#i-vencida"/></svg>Vencida</span>
+          <span class="insignia e-reasignar"><svg aria-hidden="true"><use href="#i-reasignar"/></svg>Por reasignar</span>
+        </div>
+        <p class="titulo">Montar la mesa de registro</p>
+        <p class="meta">Hora límite <span class="hora-vencida">18 abr 2027, 07:00</span> · Sin responsables · 1 de 3 pasos</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tablero de cumplimiento · escritorio</h2>
+    <div class="rejilla r5" style="margin-bottom:var(--espacio-4)">
+      <div class="panel indicador reasignar"><div class="numero">2</div><div class="pequeno etiqueta-estado">Por reasignar</div></div>
+      <div class="panel indicador vencidas"><div class="numero">4</div><div class="pequeno etiqueta-estado">Vencidas</div></div>
+      <div class="panel indicador proximas"><div class="numero">3</div><div class="pequeno etiqueta-estado">Próximas a vencer</div></div>
+      <div class="panel indicador pendientes"><div class="numero">11</div><div class="pequeno etiqueta-estado">Pendientes</div></div>
+      <div class="panel indicador completadas"><div class="numero">8</div><div class="pequeno etiqueta-estado">Completadas</div></div>
+    </div>
+    <p class="suave pequeno">El mismo indicador, cuando el grupo está en cero. El número y la palabra van juntos.</p>
+    <div class="panel indicador" style="margin-bottom:var(--espacio-4); max-width:220px">
+      <div class="numero" style="color:var(--color-vencida)">0</div>
+      <div class="pequeno" style="color:var(--color-vencida)">Ninguna vencida</div>
+    </div>
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr><th>Tarea</th><th>Responsables</th><th>Hora límite</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Montar la mesa de registro</td>
+            <td>Sin responsables</td>
+            <td><span class="hora-vencida">18 abr, 07:00</span></td>
+            <td>
+              <span class="insignia e-vencida"><svg aria-hidden="true"><use href="#i-vencida"/></svg>Vencida</span>
+              <span class="insignia e-reasignar"><svg aria-hidden="true"><use href="#i-reasignar"/></svg>Por reasignar</span>
+            </td>
+            <td><button class="boton secundario" type="button">Reasignar</button></td>
+          </tr>
+          <tr>
+            <td>Reponer el agua de la sala de mentores</td>
+            <td>Diego Mora</td>
+            <td><span class="hora-vencida">18 abr, 07:30</span></td>
+            <td><span class="insignia e-vencida"><svg aria-hidden="true"><use href="#i-vencida"/></svg>Vencida</span></td>
+            <td><button class="boton secundario" type="button">Ver tarea</button></td>
+          </tr>
+          <tr>
+            <td>Recibir al jurado en la entrada principal</td>
+            <td>Camila Ruiz, Diego Mora</td>
+            <td>18 abr, 08:30</td>
+            <td><span class="insignia e-proxima"><svg aria-hidden="true"><use href="#i-proxima"/></svg>Próxima a vencer</span></td>
+            <td><button class="boton secundario" type="button">Ver tarea</button></td>
+          </tr>
+          <tr>
+            <td>Abrir la sala de pitch</td>
+            <td>Camila Ruiz, Mateo Lema</td>
+            <td>18 abr, 09:00</td>
+            <td><span class="insignia e-pendiente"><svg aria-hidden="true"><use href="#i-pendiente"/></svg>Pendiente</span></td>
+            <td><button class="boton secundario" type="button">Ver tarea</button></td>
+          </tr>
+          <tr>
+            <td>Publicar el cronograma de la pared</td>
+            <td>Andrés Vela</td>
+            <td>18 abr, 07:00</td>
+            <td>
+              <span class="insignia e-completada"><svg aria-hidden="true"><use href="#i-completada"/></svg>Completada</span>
+              <span class="pequeno" style="display:block;margin-top:var(--espacio-1)">Completada después de la hora límite · 07:15</span>
+            </td>
+            <td><button class="boton secundario" type="button">Reabrir</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Avisos y estados de pantalla</h2>
+    <div class="rejilla r2">
+      <div class="rejilla">
+        <div class="aviso a-exito" role="status"><svg aria-hidden="true"><use href="#i-completada"/></svg><span>Tarea confirmada. Entregar kits de bienvenida al staff quedó completada.</span></div>
+        <div class="aviso a-advertencia" role="status"><svg aria-hidden="true"><use href="#i-proxima"/></svg><span>Faltan menos de 30 minutos para la hora límite.</span></div>
+        <div class="aviso a-error" role="alert"><svg aria-hidden="true"><use href="#i-vencida"/></svg><span>No hay conexión. Este cambio no se guardó. Márcalo de nuevo cuando vuelva el wifi.</span></div>
+        <div class="aviso a-info" role="status"><svg aria-hidden="true"><use href="#i-info"/></svg><span>La contraseña temporal se cambia la primera vez que entras.</span></div>
+      </div>
+      <div class="rejilla">
+        <div class="vacio">
+          <h3>No tienes tareas</h3>
+          <p class="suave pequeno">Cuando un administrador te asigne una, va a aparecer aquí.</p>
+        </div>
+        <div class="panel" aria-label="Cargando tareas">
+          <div class="esqueleto" style="width:40%"></div>
+          <div class="esqueleto" style="width:80%"></div>
+          <div class="esqueleto" style="width:55%;margin:0"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="suave pequeno">
+    <p>Turno de piso v1.0 · Staff del Interact2Hack · Mateo Sarango y Esteban Caviedes. Fuente: Sora (SIL Open Font License). Las fechas son de ejemplo: el cliente no fijó el calendario 2027.</p>
+  </footer>
+</div>
+</body>
+</html>
